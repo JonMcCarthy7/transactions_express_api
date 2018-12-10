@@ -2,9 +2,14 @@ const knex = require("../db/knex.js");
 
 module.exports = {
   index: (req, res) => {
-    knex("transactions").then(trans => {
-      res.json(trans);
-    });
+    let page = 1;
+    if (req.query.page) page + req.query.page;
+    knex("transactions")
+      .offset((page - 1) * 50)
+      .limit(50)
+      .then(trans => {
+        res.json(trans);
+      });
   },
   show: (req, res) => {
     knex("transactions")
